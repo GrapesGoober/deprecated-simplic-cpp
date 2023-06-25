@@ -19,6 +19,7 @@ namespace Simplic::AST
     bool ParseNamespAccess(Cursor& cursor, AST::Node& node) noexcept;
     bool ParseGenerics(Cursor& cursor, AST::Node& node) noexcept;
 
+    // constructs a hollow AST based solely on function signatures, struct definitions, and consts
     std::list<AST::Node> BuildHollowAST(std::string src)
     {
         // creating a new tokenizer cursor to read the source string
@@ -86,7 +87,8 @@ namespace Simplic::AST
         return signatures;
     }
 
-    // if exists, parse a namespace def and push identifiers onto the namespace scope vector
+    // parse a namespace def and push identifiers onto the namespace scope vector
+    // this is by BuildHollowAST to read each namespace defs
     void ParseNamespDef(Cursor& cursor, namespScope& nspScope)
     {
         // expect ident-dot chain   ex:   MyNamespace.SomeNamespace.AnotherNamespace
@@ -116,7 +118,8 @@ namespace Simplic::AST
     }
 
     // ident-dot chain parser with or without generics (into a list of idents, append to node's prop)
-    // this is used for ParseNamespDef to read each of the namespace's identifiers
+    // an ident-dot chain could be generics, functions, structs, anything
+    // this is used by ParseNamespDef to read the namespace def
     bool ParseNamespAccess(Cursor& cursor, AST::Node& node) noexcept
     {
         node.type = "NS ACCESS";
