@@ -12,7 +12,10 @@ namespace Simplic::AST
         {
             for (int i = 0; i < indentation; i++) std::cout << "  ";
             // if you wanna print cursorindex too:  << " (" << node.cursorIndex << ")" 
-            std::cout << node.type << " " << node.lexeme << std::endl;
+            if (node.cursorIndex != 0)
+                std::cout << node.type << " " << node.lexeme << " @" << node.cursorIndex << std::endl;
+            else
+                std::cout << node.type << " " << node.lexeme << std::endl;
 
             Print(node.prop, indentation + 1);
         }
