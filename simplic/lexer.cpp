@@ -54,6 +54,7 @@ namespace Simplic
         void Clean(Cursor& cursor)
         {
             // keep cleaning until stumbles across something else
+            // but will not clean accross lines
             while (true)
             {
                 bool isLine = IsLineComment(cursor);
@@ -64,6 +65,7 @@ namespace Simplic
         }
         void DeepClean(Cursor& cursor)
         {
+            // will clean multiple lines
             while (!IsEOF(cursor))
             {
                 Tokenize::Clean(cursor);

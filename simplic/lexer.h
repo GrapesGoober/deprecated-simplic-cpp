@@ -55,6 +55,9 @@ namespace Simplic
             closeAngBracket = ">",
             openCurlyBracket = "{",
             closeCurlyBracket = "}",
+            openRoundBracket = "(",
+            closeRoundBracket = ")",
+            pointerDeclOp = "*",
 
             // for expression
             openBrackets = "([{",
