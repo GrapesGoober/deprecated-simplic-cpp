@@ -7,7 +7,7 @@
 
 namespace Simplic::AST
 {
-    typedef std::list<std::list<std::string>> namespScope;
+    #pragma region Declarations
 
     /// <summary> 
     /// <para> WORK IN PROGRESS </para>
@@ -25,7 +25,7 @@ namespace Simplic::AST
     // This is used by BuildHollowAST to read each namespace defs
     // This function assumes it's parsing namespace def and will throw compiler
     // exception if not written in the required format
-    void ParseNamespDef(Cursor& cursor, namespScope& namespScope);
+    void ParseNamespDef(Cursor& cursor, AST::Node& node);
     
     // parse a definition of a struct, including all its properties
     void ParseStructDef(Cursor& cursor, AST::Node& node);
@@ -35,6 +35,14 @@ namespace Simplic::AST
 
     // parse a header of a function; header only contain the return type, name, and arguments
     void ParseFuncHeader(Cursor& cursor, AST::Node& node);
+    
+    // a noexcept argument list parser (into a list of argument nodes)
+    // ex: (array<string> args, tuple<int,string> tag)
+    void ParseArgumentList(Cursor& cursor, AST::Node& node);
+
+    // a noexcept argument parser (into an argument node)
+    // ex: some.type<genric>& ident
+    void ParseArgument(Cursor& cursor, AST::Node& node);
 
     // a noexcept ident-dot chain parser with or without generics (into a list of idents, append to node's prop)
     // ex: ident1.ident2.someOtherIdent < withOrWithout.Generics >
@@ -47,14 +55,13 @@ namespace Simplic::AST
     // this parser will assume that all angle brackets are for generics, and not comparison operators
     // noexcept parser; it will only return false if the string does not match the required format
     bool IsGenericsList(Cursor& cursor, AST::Node& node) noexcept;
-    
-    // a noexcept argument list parser (into a list of argument nodes)
-    // ex: (array<string> args, tuple<int,string> tag)
-    void ParseArgumentList(Cursor& cursor, AST::Node& node);
 
-    // a noexcept argument parser (into an argument node)
-    // ex: some.type<genric>& ident
-    void ParseArgument(Cursor& cursor, AST::Node& node);
+    // assign a node to the proper location in signature tree
+    void AssignSignatureToAST(std::list<AST::Node>& signatures, AST::Node node, std::list<std::string> nspScope);
+
+    #pragma endregion
+
+    #pragma region Implementations
 
     // WORK IN PROGRESS
     std::list<AST::Node> BuildHollowAST(std::string src)
@@ -62,9 +69,14 @@ namespace Simplic::AST
         // creating a new tokenizer cursor to read the source string
         Cursor cursor{ src };
         // list of nodes, this will be our hollow AST containing the signatures
-        std::list<AST::Node> signatures;
+        std::list<AST::Node> hollowAST;
+        // node to be used for injection by the parsers
+        AST::Node node;
+
         // list of strings, to keep track of namespace scope
-        namespScope nspScope;
+        std::list<std::string> nspScope;
+        // a counter stack to know how many namespace elements to pop backwards
+        std::stack<int> nspblockSize;
 
         // clean out all comments and whitespaces
         Tokenize::DeepClean(cursor);
@@ -72,15 +84,14 @@ namespace Simplic::AST
         // loop until EOF or sees end curly bracket
         while (!IsEOF(cursor))
         {
-            // node to be used for injection by the parsers
-            AST::Node node;
 
             // checking for brackets, to make sure everything's accounted for
             if (Tokenize::IsSymbol(cursor, LangDef::closeCurlyBracket))
             {
                 if (!nspScope.empty())
                 {
-                    nspScope.pop_back();
+                    for (int i = 0; i < nspblockSize.top(); i++) nspScope.pop_back();
+                    nspblockSize.pop();
                 }
                 else throw CmplException(cursor, "Unexpected token; all curly brackets '}' are accounted for");
             }
@@ -88,25 +99,34 @@ namespace Simplic::AST
             // parse namespace def, if exists
             else if (Tokenize::IsKeyword(cursor, LangDef::KWnamesp))
             {
-                ParseNamespDef(cursor, nspScope);
+                ParseNamespDef(cursor, node);
+
+                // first, keep track the size of this namespace block
+                nspblockSize.push(node.prop.size());
+
+                // then loop through each item to push to namespace stack
+                for (AST::Node n : node.prop)
+                {
+                    nspScope.push_back(n.lexeme);
+                }
             }
             // parse struct def, if exists
             else if (Tokenize::IsKeyword(cursor, LangDef::KWstruct))
             {
                 ParseStructDef(cursor, node);
-                signatures.push_back(node);
+                hollowAST.push_back(node);
             }
             // parse const def, if exists
             else if (Tokenize::IsKeyword(cursor, LangDef::KWconst))
             {
                 ParseConstDef(cursor, node);
-                signatures.push_back(node);
+                hollowAST.push_back(node);
             }
             // else, assume it is a function def (since there's nothing else we can parse)
             else
             {
                 ParseFuncHeader(cursor, node);
-                signatures.push_back(node);
+                hollowAST.push_back(node);
             }
 
             // deep clean again before next iteration, so the isEOF check can work properly
@@ -120,9 +140,8 @@ namespace Simplic::AST
             // to properly printout the error, list out the contents of the namesp
             std::string leftoverNsp;
 
-            for (std::list<std::string> level : nspScope)
-                for (std::string nsp : level)
-                    leftoverNsp += nsp + ".";
+            for (std::string nsp : nspScope)
+                leftoverNsp += nsp + ".";
             // just to prettify, remove the last dot
             leftoverNsp.pop_back();
 
@@ -130,28 +149,19 @@ namespace Simplic::AST
             throw CmplException(cursor, "The namespace '" + leftoverNsp + "' has not been closed; check your '}' brackets.");
         }
 
-        return signatures;
+        return hollowAST;
     }
 
     // FINISHED
-    void ParseNamespDef(Cursor& cursor, namespScope& nspScope)
+    void ParseNamespDef(Cursor& cursor, AST::Node& node)
     {
-        // expect ident-dot chain   ex:   MyNamespace.SomeNamespace.AnotherNamespace
-        AST::Node namespNode;
-        if (IsIdentGroup(cursor, namespNode))
+        if (IsIdentGroup(cursor, node))
         {
             // check that no generics are found
-            if (namespNode.prop.back().lexeme == "GENERICS")
+            if (node.prop.back().lexeme == "GENERICS LIST")
             {
                 throw CmplException(cursor, "Unexpected token; no generics allowed for namespace declarations");
             }
-            // then loop through each item to push to namespace stack
-            std::list<std::string> namesps;
-            for (AST::Node n : namespNode.prop)
-            {
-                namesps.push_back(n.lexeme);
-            }
-            nspScope.push_back(namesps);
             // get {, but need to deep clean first (i.e. clean multi-line) 
             Tokenize::DeepClean(cursor);
             if (!Tokenize::IsSymbol(cursor, LangDef::openCurlyBracket))
@@ -229,6 +239,80 @@ namespace Simplic::AST
     }
 
     // FINISHED
+    void ParseArgumentList(Cursor& cursor, AST::Node& node)
+    {
+        node.type = "ARGUMENTS LIST";
+        node.prop = std::list<AST::Node>{};
+
+        // first, check for circle bracket
+        Tokenize::Clean(cursor);
+        if (!Tokenize::IsSymbol(cursor, LangDef::openRoundBracket))
+        {
+            throw CmplException(cursor, "A function argument list must begin with round bracket.");
+        }
+
+        // second, check for closing bracket (for no args)
+        Tokenize::Clean(cursor);
+        if (Tokenize::IsSymbol(cursor, LangDef::closeRoundBracket)) return;
+
+        // then, go into a loop to parse argslist
+        while (!IsEOF(cursor))
+        {
+            AST::Node argnode;
+            // must be an argument, else this line will throw exception
+            ParseArgument(cursor, argnode);
+            node.prop.push_back(argnode);
+
+            Tokenize::Clean(cursor);
+            // could either end with comma
+            if (Tokenize::IsSymbol(cursor, LangDef::comma)) continue;
+            // or end with a close bracket
+            else if (Tokenize::IsSymbol(cursor, LangDef::closeRoundBracket)) return;
+            else throw CmplException(cursor, "Unexpected token; expected either a comma or closing bracket.");
+        }
+    }
+
+    // FINISHED
+    void ParseArgument(Cursor& cursor, AST::Node& node)
+    {
+        node.type = "ARGUMENT";
+
+        // first, expect value type
+        AST::Node identChain;
+        if (!IsIdentGroup(cursor, identChain))
+        {
+            throw CmplException(cursor, "Unexpected token; expected identifiers for argument type.");
+        }
+        node.prop.push_back(identChain);
+
+        // then, look for pointer operators and then argument name
+        AST::Node pointerList;
+        pointerList.type = "POINTERS LIST";
+        while (!IsEOF(cursor))
+        {
+            Tokenize::Clean(cursor);
+            // expect optional pointer declarations
+            if (Tokenize::IsSymbol(cursor, LangDef::pointerDeclOp))
+            {
+                AST::Node pointerNode;
+                pointerNode.type = "POINTER";
+                pointerNode.lexeme = "*";
+                pointerNode.cursorIndex = cursor.index;
+                pointerList.prop.push_back(pointerNode);
+                node.prop.push_back(pointerList);
+            }
+            // else, expect argument name and end the argument declaration
+            else if (AST::Node name; Tokenize::Ident(cursor, name))
+            {
+                node.lexeme = name.lexeme;
+                node.cursorIndex = name.cursorIndex;
+                break;
+            }
+            else throw CmplException(cursor, "Unexpected token; expected asterisk * for pointer declaration");
+        }
+    }
+
+    // FINISHED
     bool IsIdentGroup(Cursor& cursor, AST::Node& node) noexcept
     {
         node.type = "IDENT GROUP";
@@ -251,7 +335,7 @@ namespace Simplic::AST
             if (IsGenericsList(cursor, identNode))
             {
                 node.prop.push_back(identNode);
-                return true;
+                break;
             }
 
             // as long as there are dot operators, expect more idents
@@ -266,8 +350,9 @@ namespace Simplic::AST
                 }
                 node.prop.push_back(identNode);
             }
-            else return true; //not a dotOp -> must have finished ident group
+            else break; //not a dotOp -> must have finished ident group
         }
+        return true;
     }
 
     // FINISHED
@@ -318,79 +403,12 @@ namespace Simplic::AST
 
         return true;
     }
-
-    // WORK IN PROGRESS - NEED TESTING
-    void ParseArgumentList(Cursor& cursor, AST::Node& node)
+    
+    // WORK IN PROGRESS
+    void AssignSignatureToAST(std::list<AST::Node>& signatures, AST::Node node, std::list<std::string> nspScope)
     {
-        node.type = "ARGUMENTS LIST";
-        node.prop = std::list<AST::Node>{};
 
-        // first, check for circle bracket
-        Tokenize::Clean(cursor);
-        if (!Tokenize::IsSymbol(cursor, LangDef::openRoundBracket))
-        {
-            throw CmplException(cursor, "A function argument list must begin with round bracket.");
-        }
-
-        // second, check for closing bracket (for no args)
-        Tokenize::Clean(cursor);
-        if (Tokenize::IsSymbol(cursor, LangDef::closeRoundBracket)) return;
-
-        // then, go into a loop to parse argslist
-        while (!IsEOF(cursor))
-        {
-            AST::Node argnode;
-            // must be an argument, else this line will throw exception
-            ParseArgument(cursor, argnode);
-            node.prop.push_back(argnode);
-
-            Tokenize::Clean(cursor);
-            // could either end with comma
-            if (Tokenize::IsSymbol(cursor, LangDef::comma)) continue;
-            // or end with a close bracket
-            else if (Tokenize::IsSymbol(cursor, LangDef::closeRoundBracket)) return;
-            else throw CmplException(cursor, "Unexpected token; expected either a comma or closing bracket.");
-        }
     }
 
-    // WORK IN PROGRESS - REQUIRE TESTING
-    void ParseArgument(Cursor& cursor, AST::Node& node)
-    {
-        node.type = "ARGUMENT";
-
-        // first, expect value type
-        AST::Node identChain;
-        if (!IsIdentGroup(cursor, identChain))
-        {
-            throw CmplException(cursor, "Unexpected token; expected identifiers for argument type.");
-        }
-        node.prop.push_back(identChain);
-
-        // then, look for pointer operators and then argument name
-        AST::Node pointerList;
-        pointerList.type = "POINTERS LIST";
-        while (!IsEOF(cursor))
-        {
-            Tokenize::Clean(cursor);
-            // expect optional pointer declarations
-            if (Tokenize::IsSymbol(cursor, LangDef::pointerDeclOp))
-            {
-                AST::Node pointerNode;
-                pointerNode.type = "POINTER";
-                pointerNode.lexeme = "*";
-                pointerNode.cursorIndex = cursor.index;
-                pointerList.prop.push_back(pointerNode);
-                node.prop.push_back(pointerList);
-            }
-            // else, expect argument name and end the argument declaration
-            else if (AST::Node name; Tokenize::Ident(cursor, name))
-            {
-                node.lexeme = name.lexeme;
-                node.cursorIndex = name.cursorIndex;
-                break;
-            }
-            else throw CmplException(cursor, "Unexpected token; expected asterisk * for pointer declaration");
-        }
-    }
-
+    #pragma endregion
 }
