@@ -11,11 +11,17 @@ namespace Simplic::AST
         for (AST::Node node : tree)
         {
             for (int i = 0; i < indentation; i++) std::cout << "  ";
-            // if you wanna print cursorindex too:  << " (" << node.cursorIndex << ")" 
+            std::cout << node.type << " " << node.lexeme;
+
             if (node.cursorIndex != 0)
-                std::cout << node.type << " " << node.lexeme << " @" << node.cursorIndex << std::endl;
-            else
-                std::cout << node.type << " " << node.lexeme << std::endl;
+                std::cout << " @" << node.cursorIndex;
+            if (node.prop.size() == 0 && (
+                node.type == "GENERICS LIST" ||
+                node.type == "ARGUMENTS LIST" ||
+                node.type == "POINTERS LIST"))
+                std::cout << " (empty)";
+            
+            std::cout << std::endl;
 
             Print(node.prop, indentation + 1);
         }

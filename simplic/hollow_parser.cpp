@@ -46,7 +46,7 @@ namespace Simplic::AST
     // ex: <string, int, Math.StringNumber>
     // this parser will assume that all angle brackets are for generics, and not comparison operators
     // noexcept parser; it will only return false if the string does not match the required format
-    bool IsGenericList(Cursor& cursor, AST::Node& node) noexcept;
+    bool IsGenericsList(Cursor& cursor, AST::Node& node) noexcept;
     
     // a noexcept argument list parser (into a list of argument nodes)
     // ex: (array<string> args, tuple<int,string> tag)
@@ -201,7 +201,7 @@ namespace Simplic::AST
         }
 
         // check that we only have one identifier for our name
-        bool hasGenerics = nameNode.prop.back().type == "GENERICS";
+        bool hasGenerics = nameNode.prop.back().type == "GENERICS LIST";
         if (nameNode.prop.size() - hasGenerics > 1)
         {
             throw CmplException(cursor, "A function definition does not allow nested namespace before function name");
@@ -212,7 +212,7 @@ namespace Simplic::AST
 
         // would always have a generics subtree node, even if it's empty
         AST::Node genericsNode;
-        genericsNode.type = "GENERICS";
+        genericsNode.type = "GENERICS LIST";
         if (hasGenerics)
         {
             genericsNode = nameNode.prop.back();
@@ -248,7 +248,7 @@ namespace Simplic::AST
         while (!IsEOF(cursor))
         {
             // if found generics, break the loop and assume ident group is finished parsing
-            if (IsGenericList(cursor, identNode))
+            if (IsGenericsList(cursor, identNode))
             {
                 node.prop.push_back(identNode);
                 return true;
@@ -271,9 +271,9 @@ namespace Simplic::AST
     }
 
     // FINISHED
-    bool IsGenericList(Cursor& cursor, AST::Node& node) noexcept
+    bool IsGenericsList(Cursor& cursor, AST::Node& node) noexcept
     {
-        node.type = "GENERICS";
+        node.type = "GENERICS LIST";
         node.lexeme = "";
         node.cursorIndex = 0;
         node.prop = std::list<AST::Node>{};
@@ -322,7 +322,7 @@ namespace Simplic::AST
     // WORK IN PROGRESS - NEED TESTING
     void ParseArgumentList(Cursor& cursor, AST::Node& node)
     {
-        node.type = "ARGSLIST";
+        node.type = "ARGUMENTS LIST";
         node.prop = std::list<AST::Node>{};
 
         // first, check for circle bracket
@@ -368,7 +368,7 @@ namespace Simplic::AST
 
         // then, look for pointer operators and then argument name
         AST::Node pointerList;
-        pointerList.type = "POINTER LIST";
+        pointerList.type = "POINTERS LIST";
         while (!IsEOF(cursor))
         {
             Tokenize::Clean(cursor);
