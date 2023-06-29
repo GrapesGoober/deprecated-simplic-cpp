@@ -9,8 +9,16 @@ namespace Simplic::AST
 {
     typedef std::list<std::list<std::string>> namespScope;
 
-    // Constructs a hollow AST based solely on function signatures, struct definitions, and consts
-    // This function is used by the main func as the first step of parsing
+    /// <summary> 
+    /// <para> WORK IN PROGRESS </para>
+    /// Constructs a partially built syntax tree, called "hollow AST", based solely
+    /// on function headers, structs, and consts. This BuildHollowAST is used by the function 
+    /// main() as the first step of parsing.
+    /// </summary>
+    /// 
+    /// <param name='src'> source code, in string </param>
+    /// <returns> a partially built tree, called "hollow AST" </returns>
+    /// <seealso cref="AST::Node"/>
     std::list<AST::Node> BuildHollowAST(std::string src);
 
     // Parse a namespace def and push identifiers onto the namespace scope vector
@@ -25,14 +33,14 @@ namespace Simplic::AST
     // parse a definition of a const block, including all its member constants
     void ParseConstDef(Cursor& cursor, AST::Node& node);
 
-    // parse a signature of a function; signature only contain the identifiers, generics, and arguments
-    void ParseFuncSignature(Cursor& cursor, AST::Node& node);
+    // parse a header of a function; header only contain the return type, name, and arguments
+    void ParseFuncHeader(Cursor& cursor, AST::Node& node);
 
     // a noexcept ident-dot chain parser with or without generics (into a list of idents, append to node's prop)
     // ex: ident1.ident2.someOtherIdent < withOrWithout.Generics >
     // this is used by ParseNamespDef to read the namespace def
     // noexcept parser; it will only return false if the string does not match the required format
-    bool IsIdentChain(Cursor& cursor, AST::Node& node) noexcept;
+    bool IsIdentGroup(Cursor& cursor, AST::Node& node) noexcept;
 
     // a noexcept generics list parser (into a list of ident groups, append to node's prop)
     // ex: <string, int, Math.StringNumber>
@@ -48,16 +56,14 @@ namespace Simplic::AST
     // ex: some.type<genric>& ident
     void ParseArgument(Cursor& cursor, AST::Node& node);
 
-
-
-
-
     // WORK IN PROGRESS
     std::list<AST::Node> BuildHollowAST(std::string src)
     {
         // creating a new tokenizer cursor to read the source string
         Cursor cursor{ src };
+        // list of nodes, this will be our hollow AST containing the signatures
         std::list<AST::Node> signatures;
+        // list of strings, to keep track of namespace scope
         namespScope nspScope;
 
         // clean out all comments and whitespaces
@@ -99,7 +105,7 @@ namespace Simplic::AST
             // else, assume it is a function def (since there's nothing else we can parse)
             else
             {
-                ParseFuncSignature(cursor, node);
+                ParseFuncHeader(cursor, node);
                 signatures.push_back(node);
             }
 
@@ -132,7 +138,7 @@ namespace Simplic::AST
     {
         // expect ident-dot chain   ex:   MyNamespace.SomeNamespace.AnotherNamespace
         AST::Node namespNode;
-        if (IsIdentChain(cursor, namespNode))
+        if (IsIdentGroup(cursor, namespNode))
         {
             // check that no generics are found
             if (namespNode.prop.back().lexeme == "GENERICS")
@@ -169,80 +175,99 @@ namespace Simplic::AST
         throw CmplException(cursor, "const unimplemented");
     }
 
-    // AWAITING - FOR ParseArgumentList & ParseArgument
-    void ParseFuncSignature(Cursor& cursor, AST::Node &node)
+    // WORK IN PROGRESS
+    void ParseFuncHeader(Cursor& cursor, AST::Node &node)
     {
-        node.type = "FUNC";
+        node.type = "FUNC DECL";
         node.lexeme = "";
         node.cursorIndex = 0;
         node.prop = std::list<AST::Node>{};
 
         // First, expect an ident group for return type
         AST::Node returnType;
-        returnType.type = "RETURN TYPE";
-        if (!IsIdentChain(cursor, returnType))
+        if (!IsIdentGroup(cursor, returnType))
         {
             // if not, throw exception
             throw CmplException(cursor, "A function definition must begin with a return type.");
         }
         node.prop.push_back(returnType);
 
-        // then, expect another ident group for function identifiers (and maybe generics and namespace)
-        AST::Node name;
-        if (!IsIdentChain(cursor, name))
+        // second, expect another ident group for function name, and maybe generics
+        AST::Node nameNode; // this node is just only used for handling info, not to construct AST
+        if (!IsIdentGroup(cursor, nameNode))
         {
             // if not, throw exception
             throw CmplException(cursor, "A function definition must have function name.");
         }
-        node.prop.push_back(name);
 
-        // then, expect an argument list
+        // check that we only have one identifier for our name
+        bool hasGenerics = nameNode.prop.back().type == "GENERICS";
+        if (nameNode.prop.size() - hasGenerics > 1)
+        {
+            throw CmplException(cursor, "A function definition does not allow nested namespace before function name");
+        }
+
+        // assign the name to FUNC DEF lexeme
+        node.lexeme = nameNode.prop.front().lexeme;
+
+        // would always have a generics subtree node, even if it's empty
+        AST::Node genericsNode;
+        genericsNode.type = "GENERICS";
+        if (hasGenerics)
+        {
+            genericsNode = nameNode.prop.back();
+        }
+        node.prop.push_back(genericsNode);
+
+        // third, expect an argument list
         AST::Node argsList;
         ParseArgumentList(cursor, argsList);
         node.prop.push_back(argsList);
+
+        // WORK IN PROGRESS
+        // lastly, skim the function body to get the proper function body
     }
 
     // FINISHED
-    bool IsIdentChain(Cursor& cursor, AST::Node& node) noexcept
+    bool IsIdentGroup(Cursor& cursor, AST::Node& node) noexcept
     {
         node.type = "IDENT GROUP";
         node.lexeme = "";
         node.cursorIndex = 0;
         node.prop = std::list<AST::Node>{};
         int initialIndex = cursor.index;
-        AST::Node nsNode;
+        AST::Node identNode;
 
         Tokenize::Clean(cursor);
 
         // must begin with an ident
-        if (!Tokenize::Ident(cursor, nsNode)) return false;
-        node.prop.push_back(nsNode);
+        if (!Tokenize::Ident(cursor, identNode)) return false;
+        node.prop.push_back(identNode);
 
         // keep looping for more idents
         while (!IsEOF(cursor))
         {
-            Tokenize::Clean(cursor);
-            if (IsGenericList(cursor, nsNode))
+            // if found generics, break the loop and assume ident group is finished parsing
+            if (IsGenericList(cursor, identNode))
             {
-                node.prop.push_back(nsNode);
-                break;
+                node.prop.push_back(identNode);
+                return true;
             }
 
             // as long as there are dot operators, expect more idents
+            Tokenize::Clean(cursor);
             if (Tokenize::IsSymbol(cursor, LangDef::dotOp))
             {
                 // but if this does not get an ident, then return false
-                if (!Tokenize::Ident(cursor, nsNode))
+                if (!Tokenize::Ident(cursor, identNode))
                 {
                     cursor.index = initialIndex;
                     return false;
                 }
-                node.prop.push_back(nsNode);
+                node.prop.push_back(identNode);
             }
-            else break; //not a dotOp -> must have finished namespace
+            else return true; //not a dotOp -> must have finished ident group
         }
-
-        return true;
     }
 
     // FINISHED
@@ -264,7 +289,7 @@ namespace Simplic::AST
 
         // first node must be ident group
         AST::Node genericNode;
-        if (!IsIdentChain(cursor, genericNode))
+        if (!IsIdentGroup(cursor, genericNode))
         {
             cursor.index = initialIndex;
             return false;
@@ -277,7 +302,7 @@ namespace Simplic::AST
             Tokenize::Clean(cursor);
             if (Tokenize::IsSymbol(cursor, LangDef::comma))
             {
-                if (IsIdentChain(cursor, genericNode))
+                if (IsIdentGroup(cursor, genericNode))
                 {
                     node.prop.push_back(genericNode);
                 }
@@ -335,7 +360,7 @@ namespace Simplic::AST
 
         // first, expect value type
         AST::Node identChain;
-        if (!IsIdentChain(cursor, identChain))
+        if (!IsIdentGroup(cursor, identChain))
         {
             throw CmplException(cursor, "Unexpected token; expected identifiers for argument type.");
         }
