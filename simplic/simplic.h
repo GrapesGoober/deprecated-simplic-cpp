@@ -24,11 +24,11 @@ namespace Simplic
             int cursorIndex = 0; // location of this token in the source string
         };
 
-        std::list<AST::Node> BuildHollowAST(std::string src);
+        AST::Node BuildHollowAST(std::string src);
         void ParseExpr(Cursor& cursor, AST::Node& node);
 
         // Utility function for debugging
-        void Print(std::list<AST::Node> tree, int indentation = 0);
+        void Print(AST::Node tree, int indentation = 0);
     }
 
     // assembly stage, i.e. the final stage before the hex file

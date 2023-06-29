@@ -19,7 +19,7 @@ namespace Simplic::AST
     /// <param name='src'> source code, in string </param>
     /// <returns> a partially built tree, called "hollow AST" </returns>
     /// <seealso cref="AST::Node"/>
-    std::list<AST::Node> BuildHollowAST(std::string src);
+    AST::Node BuildHollowAST(std::string src);
 
     // Parse a namespace def and push identifiers onto the namespace scope vector
     // This is used by BuildHollowAST to read each namespace defs
@@ -64,12 +64,13 @@ namespace Simplic::AST
     #pragma region Implementations
 
     // WORK IN PROGRESS
-    std::list<AST::Node> BuildHollowAST(std::string src)
+    AST::Node BuildHollowAST(std::string src)
     {
         // creating a new tokenizer cursor to read the source string
         Cursor cursor{ src };
-        // list of nodes, this will be our hollow AST containing the signatures
-        std::list<AST::Node> hollowAST;
+        // root node for hollow AST, containing the signatures
+        AST::Node hollowAST;
+        hollowAST.type = "ROOT";
         // node to be used for injection by the parsers
         AST::Node node;
 
@@ -102,7 +103,7 @@ namespace Simplic::AST
                 ParseNamespDef(cursor, node);
 
                 // first, keep track the size of this namespace block
-                nspblockSize.push(node.prop.size());
+                nspblockSize.push((int)node.prop.size());
 
                 // then loop through each item to push to namespace stack
                 for (AST::Node n : node.prop)
@@ -114,19 +115,19 @@ namespace Simplic::AST
             else if (Tokenize::IsKeyword(cursor, LangDef::KWstruct))
             {
                 ParseStructDef(cursor, node);
-                hollowAST.push_back(node);
+                hollowAST.prop.push_back(node);
             }
             // parse const def, if exists
             else if (Tokenize::IsKeyword(cursor, LangDef::KWconst))
             {
                 ParseConstDef(cursor, node);
-                hollowAST.push_back(node);
+                hollowAST.prop.push_back(node);
             }
             // else, assume it is a function def (since there's nothing else we can parse)
             else
             {
                 ParseFuncHeader(cursor, node);
-                hollowAST.push_back(node);
+                hollowAST.prop.push_back(node);
             }
 
             // deep clean again before next iteration, so the isEOF check can work properly

@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     try
     {
         // then builds the initial hollow AST
-        std::list<Simplic::AST::Node> AST = Simplic::AST::BuildHollowAST(buffer.str());
+        Simplic::AST::Node AST = Simplic::AST::BuildHollowAST(buffer.str());
         Simplic::AST::Print(AST);
 
         /*std::string s;

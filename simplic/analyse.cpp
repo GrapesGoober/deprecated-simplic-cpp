@@ -6,9 +6,9 @@
 
 namespace Simplic::AST
 {
-    void Print(std::list<AST::Node> tree, int indentation)
+    void Print(AST::Node tree, int indentation)
     {
-        for (AST::Node node : tree)
+        for (AST::Node node : tree.prop)
         {
             for (int i = 0; i < indentation; i++) std::cout << "  ";
             std::cout << node.type << " " << node.lexeme;
@@ -23,7 +23,7 @@ namespace Simplic::AST
             
             std::cout << std::endl;
 
-            Print(node.prop, indentation + 1);
+            Print(node, indentation + 1);
         }
     }
 }
