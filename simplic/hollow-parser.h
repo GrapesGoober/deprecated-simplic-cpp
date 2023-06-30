@@ -1,5 +1,5 @@
 
-///     This is Hollow Parser heading file. This contain function declarations only useful for
+///     This is Hollow Parser header file. This contain function declarations only useful for
 ///     hollow parser scripts. This is also the main location for hollow parsers documentation
 
 #pragma once
@@ -13,15 +13,6 @@
 
 namespace Simplic::AST
 {
-
-    // The XML documentation for BuildHollowAST is written in simplic.h
-    // 
-    // Constructs a partially built syntax tree, called "hollow AST", based solely
-    // on function headers, structs, and consts. This BuildHollowAST is used by the function 
-    // main() as the first step of parsing.
-    
-    AST::Node BuildHollowAST(std::string src);
-
     /// <summary>
     /// Parse a namespace def and push identifiers onto the namespace scope vector
     /// This is used by BuildHollowAST to read each namespace defs
@@ -39,7 +30,7 @@ namespace Simplic::AST
     void ParseConstDef(Cursor& cursor, AST::Node& node);
 
     // parse a header of a function; header only contain the return type, name, and arguments
-    void ParseFuncHeader(Cursor& cursor, AST::Node& node);
+    void ParseFuncDef(Cursor& cursor, AST::Node& node);
 
     // a noexcept argument list parser (into a list of argument nodes)
     // ex: (array<string> args, tuple<int,string> tag)
