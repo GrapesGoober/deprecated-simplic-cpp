@@ -24,7 +24,18 @@ namespace Simplic
             int cursorIndex = 0; // location of this token in the source string
         };
 
+        /// <summary> 
+        /// <para> WORK IN PROGRESS </para>
+        /// Constructs a partially built syntax tree, called "hollow AST", based solely
+        /// on function headers, structs, and consts. This BuildHollowAST is used by the function 
+        /// main() as the first step of parsing.
+        /// </summary>
+        /// 
+        /// <param name='src'> source code, in string </param>
+        /// <returns> a partially built tree, called "hollow AST" </returns>
+        /// <seealso cref="AST::Node"/>
         AST::Node BuildHollowAST(std::string src);
+
         void ParseExpr(Cursor& cursor, AST::Node& node);
 
         // Utility function for debugging
