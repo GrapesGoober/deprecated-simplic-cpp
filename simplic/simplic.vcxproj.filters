@@ -24,13 +24,13 @@
     <ClCompile Include="assembler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hollow_parser.cpp">
+    <ClCompile Include="hollow-parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="expr_parser.cpp">
+    <ClCompile Include="expr-parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="analyse.cpp">
