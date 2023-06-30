@@ -57,7 +57,7 @@ namespace Simplic::AST
     bool IsGenericsList(Cursor& cursor, AST::Node& node) noexcept;
 
     // assign a node to the proper location in signature tree
-    void AssignSignatureToAST(std::list<AST::Node>& signatures, AST::Node node, std::list<std::string> nspScope);
+    void AssignSignatureToAST(AST::Node& signatures, AST::Node node, std::list<std::string> nspScope);
 
     #pragma endregion
 
@@ -115,19 +115,19 @@ namespace Simplic::AST
             else if (Tokenize::IsKeyword(cursor, LangDef::KWstruct))
             {
                 ParseStructDef(cursor, node);
-                hollowAST.prop.push_back(node);
+                AssignSignatureToAST(hollowAST, node, nspScope);
             }
             // parse const def, if exists
             else if (Tokenize::IsKeyword(cursor, LangDef::KWconst))
             {
                 ParseConstDef(cursor, node);
-                hollowAST.prop.push_back(node);
+                AssignSignatureToAST(hollowAST, node, nspScope);
             }
             // else, assume it is a function def (since there's nothing else we can parse)
             else
             {
                 ParseFuncHeader(cursor, node);
-                hollowAST.prop.push_back(node);
+                AssignSignatureToAST(hollowAST, node, nspScope);
             }
 
             // deep clean again before next iteration, so the isEOF check can work properly
@@ -189,7 +189,7 @@ namespace Simplic::AST
     // WORK IN PROGRESS
     void ParseFuncHeader(Cursor& cursor, AST::Node &node)
     {
-        node.type = "FUNC DECL";
+        node.type = "FUNC DEF";
         node.lexeme = "";
         node.cursorIndex = 0;
         node.prop = std::list<AST::Node>{};
@@ -300,13 +300,13 @@ namespace Simplic::AST
                 pointerNode.lexeme = "*";
                 pointerNode.cursorIndex = cursor.index;
                 pointerList.prop.push_back(pointerNode);
-                node.prop.push_back(pointerList);
             }
             // else, expect argument name and end the argument declaration
             else if (AST::Node name; Tokenize::Ident(cursor, name))
             {
                 node.lexeme = name.lexeme;
                 node.cursorIndex = name.cursorIndex;
+                node.prop.push_back(pointerList);
                 break;
             }
             else throw CmplException(cursor, "Unexpected token; expected asterisk * for pointer declaration");
@@ -406,9 +406,39 @@ namespace Simplic::AST
     }
     
     // WORK IN PROGRESS
-    void AssignSignatureToAST(std::list<AST::Node>& signatures, AST::Node node, std::list<std::string> nspScope)
+    void AssignSignatureToAST(AST::Node& hollowAST, AST::Node node, std::list<std::string> nspScope)
     {
+        // initial point to start search = root of tree
+        AST::Node* currentNode = &hollowAST;
+        // looping through each namespace string
+        for (std::string namesp : nspScope)
+        {
+            bool nodeFound = false;
+            // loop through each of node's prop to find the right subtree
+            for (AST::Node& n : (*currentNode).prop)
+            {
+                if (n.type == "NAMESP" && n.lexeme == namesp)
+                {
+                    // subtree found; set the current node to this node, and end inner loop
+                    currentNode = &n;
+                    nodeFound = true;
+                    break;
+                }
+            }
+            // if it reaches this point, it means that the target namespace node is not found
+            if (nodeFound == false)
+            {
+                // counstruct a new namespace node and append it to current node
+                AST::Node newNode;
+                newNode.type = "NAMESP";
+                newNode.lexeme = namesp;
+                (*currentNode).prop.push_back(newNode);
+                currentNode = &(*currentNode).prop.back();
+            }
 
+        }
+        // when it reaches this point, it means that we have the proper subtree
+        (*currentNode).prop.push_back(node);
     }
 
     #pragma endregion
