@@ -134,10 +134,9 @@
     <ClCompile Include="expr-parser.cpp" />
     <ClCompile Include="lexer.cpp" />
     <ClCompile Include="build-hollow-ast.cpp" />
-    <ClCompile Include="parse-const-def.cpp" />
     <ClCompile Include="parse-func-def.cpp" />
     <ClCompile Include="parse-ident-group.cpp" />
-    <ClCompile Include="parse-struct-def.cpp" />
+    <ClCompile Include="parse-struct-const-def.cpp" />
     <ClCompile Include="simplic.cpp" />
     <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="analyse.cpp" />

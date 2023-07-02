@@ -45,10 +45,7 @@
     <ClCompile Include="parse-ident-group.cpp">
       <Filter>Source Files\Hollow Parsers</Filter>
     </ClCompile>
-    <ClCompile Include="parse-struct-def.cpp">
-      <Filter>Source Files\Hollow Parsers</Filter>
-    </ClCompile>
-    <ClCompile Include="parse-const-def.cpp">
+    <ClCompile Include="parse-struct-const-def.cpp">
       <Filter>Source Files\Hollow Parsers</Filter>
     </ClCompile>
   </ItemGroup>

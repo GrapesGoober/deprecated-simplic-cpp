@@ -8,6 +8,11 @@
 
 namespace Simplic::AST
 {
+    void ParseStructDef(Cursor& cursor, AST::Node& node)
+    {
+        throw CmplException(cursor, "struct unimplemented");
+    }
+
     void ParseConstDef(Cursor& cursor, AST::Node& node)
     {
         throw CmplException(cursor, "const unimplemented");
