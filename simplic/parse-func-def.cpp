@@ -25,6 +25,19 @@ namespace Simplic::AST
         node.prop.push_back(returnType);
 
         // second, expect another ident group for function name, and maybe generics
+        ParseFuncName(cursor, node);
+
+        // third, expect an argument list
+        AST::Node argsList;
+        ParseArgumentList(cursor, argsList);
+        node.prop.push_back(argsList);
+
+        // WORK IN PROGRESS
+        // lastly, skim the function body to get the proper function body
+    }
+
+    void ParseFuncName(Cursor& cursor, AST::Node& node)
+    {
         AST::Node nameNode; // this node is just only used for handling info, not to construct AST
         if (!IsIdentGroup(cursor, nameNode))
         {
@@ -50,14 +63,6 @@ namespace Simplic::AST
             genericsNode = nameNode.prop.back();
         }
         node.prop.push_back(genericsNode);
-
-        // third, expect an argument list
-        AST::Node argsList;
-        ParseArgumentList(cursor, argsList);
-        node.prop.push_back(argsList);
-
-        // WORK IN PROGRESS
-        // lastly, skim the function body to get the proper function body
     }
 
     void ParseArgumentList(Cursor& cursor, AST::Node& node)
@@ -132,4 +137,8 @@ namespace Simplic::AST
         }
     }
 
+    void SkipFuncBody(Cursor& cursor, AST::Node& node)
+    {
+
+    }
 }

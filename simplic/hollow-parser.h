@@ -32,13 +32,18 @@ namespace Simplic::AST
     // parse a header of a function; header only contain the return type, name, and arguments
     void ParseFuncDef(Cursor& cursor, AST::Node& node);
 
-    // a noexcept argument list parser (into a list of argument nodes)
+    // a function name parser, with optional generics list
+    void ParseFuncName(Cursor& cursor, AST::Node& node);
+
+    // an argument list parser (into a list of argument nodes)
     // ex: (array<string> args, tuple<int,string> tag)
     void ParseArgumentList(Cursor& cursor, AST::Node& node);
 
-    // a noexcept argument parser (into an argument node)
+    // an argument parser (into an argument node)
     // ex: some.type<genric>& ident
     void ParseArgument(Cursor& cursor, AST::Node& node);
+
+    void SkipFuncBody(Cursor& cursor, AST::Node& node);
 
     // a noexcept ident-dot chain parser with or without generics (into a list of idents, append to node's prop)
     // ex: ident1.ident2.someOtherIdent < withOrWithout.Generics >
