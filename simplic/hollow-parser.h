@@ -32,8 +32,8 @@ namespace Simplic::AST
     // parse a header of a function; header only contain the return type, name, and arguments
     void ParseFuncDef(Cursor& cursor, AST::Node& node);
 
-    // a function name parser, with optional generics list
-    void ParseFuncName(Cursor& cursor, AST::Node& node);
+    // a function generics parser
+    void ParseFuncGenerics(Cursor& cursor, AST::Node& node);
 
     // an argument list parser (into a list of argument nodes)
     // ex: (array<string> args, tuple<int,string> tag)

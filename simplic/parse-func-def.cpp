@@ -15,7 +15,7 @@ namespace Simplic::AST
         node.cursorIndex = 0;
         node.prop = std::list<AST::Node>{};
 
-        // First, expect an ident group for return type
+        // 1) expect an ident group for return type
         AST::Node returnType;
         if (!IsIdentGroup(cursor, returnType))
         {
@@ -24,10 +24,27 @@ namespace Simplic::AST
         }
         node.prop.push_back(returnType);
 
-        // second, expect another ident group for function name, and maybe generics
-        ParseFuncName(cursor, node);
+        // 2) expect the name of the function
+        Tokenize::Clean(cursor);
+        if (AST::Node nameNode; Tokenize::Ident(cursor, nameNode))
+        {
+            // assign the name to the root of func-def tree
+            node.lexeme = nameNode.lexeme;
+        }
+        // if not, throw exception
+        else throw CmplException(cursor, "A function definition must have function name.");
 
-        // third, expect an argument list
+        // 3) determine whether there are generics for this func
+        AST::Node genericsList;
+        ParseFuncGenerics(cursor, genericsList);
+        if (genericsList.prop.size() != 0)
+        {
+            // turn this func-def into a generic-func-def
+            node.type = "GENERIC FUNC DEF";
+            node.prop.push_back(genericsList);
+        }
+
+        // 4) expect an argument list
         AST::Node argsList;
         ParseArgumentList(cursor, argsList);
         node.prop.push_back(argsList);
@@ -36,33 +53,31 @@ namespace Simplic::AST
         // lastly, skim the function body to get the proper function body
     }
 
-    void ParseFuncName(Cursor& cursor, AST::Node& node)
+    void ParseFuncGenerics(Cursor& cursor, AST::Node& node)
     {
-        AST::Node nameNode; // this node is just only used for handling info, not to construct AST
-        if (!IsIdentGroup(cursor, nameNode))
+        node.type = "GENERICS LIST";
+        AST::Node identNode;
+        Tokenize::Clean(cursor);
+        if (Tokenize::IsSymbol(cursor, LangDef::openAngBracket))
         {
-            // if not, throw exception
-            throw CmplException(cursor, "A function definition must have function name.");
+            while (true)
+            {
+                Tokenize::Clean(cursor);
+                if (Tokenize::Ident(cursor, identNode))
+                {
+                    node.prop.push_back(identNode);
+                    Tokenize::Clean(cursor);
+                    if (Tokenize::IsSymbol(cursor, LangDef::closeAngBracket)) break;
+                    else if (Tokenize::IsSymbol(cursor, LangDef::comma)) continue;
+                    else if (IsEOF(cursor)) throw CmplException(cursor, "Unexpected End-Of-File.");
+                    else throw CmplException(cursor, "Unexpected token");
+                }
+                else
+                {
+                    throw CmplException(cursor, "Expect an identifier for generics.");
+                }
+            }
         }
-
-        // check that we only have one identifier for our name
-        bool hasGenerics = nameNode.prop.back().type == "GENERICS LIST";
-        if (nameNode.prop.size() - hasGenerics > 1)
-        {
-            throw CmplException(cursor, "A function definition does not allow nested namespace before function name");
-        }
-
-        // assign the name to FUNC DEF lexeme
-        node.lexeme = nameNode.prop.front().lexeme;
-
-        // would always have a generics subtree node, even if it's empty
-        AST::Node genericsNode;
-        genericsNode.type = "GENERICS LIST";
-        if (hasGenerics)
-        {
-            genericsNode = nameNode.prop.back();
-        }
-        node.prop.push_back(genericsNode);
     }
 
     void ParseArgumentList(Cursor& cursor, AST::Node& node)
