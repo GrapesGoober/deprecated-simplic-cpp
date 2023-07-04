@@ -14,10 +14,10 @@
 namespace Simplic::AST
 {
     /// <summary>
-    /// Parse a namespace def and push identifiers onto the namespace scope vector
-    /// This is used by BuildHollowAST to read each namespace defs
+    /// Parse a namespace def and push identifiers onto the namespace scope vector.
+    /// This is used by BuildHollowAST to read each namespace defs.
     /// This function assumes it's parsing namespace def and will throw compiler
-    /// exception if not written in the required format
+    /// exception if not written in the required format.
     /// </summary>
     /// <param name="cursor"> cursor with the source code </param>
     /// <param name="node"> a node to be injected with data </param>
