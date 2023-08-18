@@ -12,15 +12,17 @@ The details of Simplic language has not yet been finalized besides the syntax. N
 
 ## How It Works
 SimplicCompiler is separated into 3 parts, as follows
-# Front End
+### Front End
 Takes care of parsing the initial source code, as strings, into a High-Level Intermediate Representation (HIR). This HIR will take the form of a Parse Tree (PT), which comes in two flavours: Hollow PT (or HPT), and Complete PT (or CPT). Here is the detailed explanation:
 1) The Tokenizer reads the source code, as a one long string, into tokens, implemented as AST::Node.
-2) The HollowParser functions generates the HPT using the Tokenizer. This parsing process only considers the namespaces, function signatures, constants, and structs. It does not consider function bodies. This stage checks most of the syntatic errora.
+2) The HollowParser functions generates the HPT using the Tokenizer. This parsing process only considers the namespaces, function signatures, constants, and structs. It does not consider function bodies. This stage checks most of the syntatic errors.
 3) The Analyzer functions does typechecks and further syntatic and structural checks. This would prepare the HPT to be populated.
 4) The CompleteParser functions parses the function bodies and populate the HPT. Once completed, this will become the CPT. This stage will also do further typechecking as well.
 
-#Medium End
+### Medium End
 unimplemented
 
-#Back End
+### Back End
 unimplemented
+
+For futher understanding of the theory, I recommend "Advanced Compiler Design and Implementation by Steven Muchnick. 
