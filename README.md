@@ -25,4 +25,4 @@ unimplemented
 ### Back End
 unimplemented
 
-For futher understanding of the theory, I recommend "Advanced Compiler Design and Implementation by Steven Muchnick. 
+For futher understanding of the theory, I recommend "Advanced Compiler Design and Implementation" by Steven Muchnick. 
