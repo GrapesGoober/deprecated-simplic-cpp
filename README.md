@@ -11,6 +11,8 @@ Simplic language is also intended to be reduced and simplified, while also maint
 The details of Simplic language has not yet been finalized besides the syntax. Nevertheless, Simplic is intended to be as simple and bare-bone as possible without compromising functionality. Simplic would be a functional language, much like C, but with structs, generics, and simple polymorphism. It is not intended to be an OOP language.
 
 ## How It Works
+This section will only give an overview of the inner workings. A full complete documentation does not yet exist. 
+
 SimplicCompiler is separated into 3 parts, as follows
 ### Front End
 Takes care of parsing the initial source code, as strings, into a High-Level Intermediate Representation (HIR). This HIR will take the form of a Parse Tree (PT), which comes in two flavours: Hollow PT (or HPT), and Complete PT (or CPT). Here is the detailed explanation:
