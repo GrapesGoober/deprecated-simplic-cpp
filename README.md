@@ -1,10 +1,10 @@
 # Simplic Compiler 
 
 ### Author: Graps, Nachat K.
-This branch currently contains the latest stable version of the assembler. This code reads a simplic assembly file (in plain text) and generate a machine code in .hex file, which could then be read by Neeman's Digital ROM module. This is the instructions for the SimplicCore. The assembler is written in C++20 standard, and there are no external dependencies.
+This branch currently contains the latest stable version of the assembler and some one result example. The assembler reads a simplic assembly file (in plain text) and generate a machine code in .hex file, which could then be read by Neeman's Digital ROM module, which would act as the instructions for the SimplicCore. The assembler is written in C++20 standard, and there are no external dependencies.
 
 ## To run this...
-Examples `FibbonaciTest.txt` assembly program and `FibbonaciTest.hex` machine code file are provided. However, if you want to run using your own assembly program, build and run the assembler. The program has one argument: the file name of the simplic asm file. Note that the assembly file is written in plain text. Execution should look like
+Examples `FibbonaciTest.txt` assembly program and `FibbonaciTest.hex` machine code file are provided. However, if you want to run using your own assembly program, you can build and run the assembler. The program has one argument: the file name of the simplic asm file. Note that the assembly file is written in plain text. Execution should look like
 
 `simplic.exe "your-asm-file.txt"`
 For example: `simplic.exe "FibbonaciTest.txt"`
