@@ -13,7 +13,6 @@ For example: `simplic.exe "FibbonaciTest.txt"`
 
 This will generate a .hex file with the same name. It contains the SimplicCore instructions. To upload this to Neeman's Digital, right click on the ROM (the instruction memory), go to advanced, tick the "Reload at model start" checkbox then put the .hex file location there. This should load the instructions into processor and it should be able to run your program.
 
-
 ## About The Compiler
 Simplic is a series of personal coding projects with the goal of becoming a simplified representation of modern computers, all the way from a series of logic gates, to a soft-core processor, to a functional programming language, and to a running software, all from scratch. Every part of this project is meant to be a simplified analogy of their respective counterparts.
 
