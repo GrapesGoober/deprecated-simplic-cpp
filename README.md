@@ -3,7 +3,7 @@
 This branch contains the latest stable version of the assembler. This reads an assembly file and generate a machine code in .hex file, which could then be read by Neeman's Digital ROM module. This is the instructions for the SimplicCore. This is a VS2022 C++ project. There are no external dependencies. Note: the project is built in x64, but if your computer is of a different species, you can always build it yourself :)
 
 ### To run this...
-Examples `FibbonaciTest.txt` assembly program and `FibbonaciTest.hex` machine code files are provided.
+Examples `FibbonaciTest.txt` assembly program and `FibbonaciTest.hex` machine code file are provided.
 
 Execute the exe in your preferred cli. This has one argument: the file name of the asm file. (Note: asm file can be written in any format, just make sure to specify it)
 
