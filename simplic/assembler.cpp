@@ -192,8 +192,6 @@ namespace Simplic::Asm
         {
             uint16_t mcCode = ReadAsmLine(line);
             if ((int16_t)mcCode == -1) continue;
-            std::cout << mcCode;
-            std::cout << line << std::endl;
             mcodes.push_back(mcCode);
         }
 
