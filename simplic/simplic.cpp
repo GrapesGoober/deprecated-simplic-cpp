@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
     //write machine code to file
     Simplic::Asm::WriteToHexFile(targetFilepath + ".hex", mcCode);
-    
+    std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;
 
     return 0;
 }
