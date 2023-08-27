@@ -206,14 +206,12 @@ namespace Simplic::Asm
         uint64_t address = 0;
         for (uint16_t instr : mcodes) {
             uint64_t mcCode = (uint64_t)0x02 << 48; //final machine code begins with 02 byte size
-            address += 2;
             mcCode += address << 32; //followed by address (increment by 2)
             mcCode += (uint64_t)instr << 8; //mode = 00 and then 2 data bytes
-
             uint8_t sum = 0; //checksum is the 2nd-comp of the sum of all bytes
             for (uint64_t mcBytes = mcCode >> 8; mcBytes != 0; mcBytes >>= 8) sum += (uint8_t)mcBytes;
             mcCode += (uint64_t)((uint8_t)~sum) + 1;
-
+            address += 2; //increment the address for the next instruction
             File << ":0" << std::uppercase << std::hex << mcCode << std::endl;
         }
 
