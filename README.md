@@ -1,10 +1,10 @@
 # Simplic Compiler 
 
 ### Author: Graps, Nachat K.
-Currently, Simplic's latest stable version only contains the Simplic-ASM assembler and the soft-core Simplic-Core (in a digital circuit .dig file). The assembler reads a simplic assembly file (in plain text) and generate a machine code file in .hex extension, which could then be read by Neeman's Digital ROM module. The assembler is written in C++20 standard, and there are no external dependencies.
+Currently, Simplic's latest stable version only contains the Simplic-ASM assembler and the Simplic-Core processor circuit (in a digital circuit .dig file). The assembler reads a simplic assembly file (in plain ASCII text) and generate a machine code file in .hex extension, which could then be read by Neeman's Digital ROM module. The assembler is written in C++20 standard, and there are no external dependencies.
 
 ## To run this...
-Examples `FibbonaciTest.txt` assembly program and `FibbonaciTest.hex` machine code file are provided. However, if you want to run using your own assembly program, you can build and run the assembler. The program has one argument: the file name of the simplic asm file. Note that the assembly file is written in plain ASCII text. There is only one cli argument, which should look like
+You would require only C++20 and Neeman's circuit simulator Digital. Examples `FibbonaciTest.txt` assembly program and `FibbonaciTest.hex` machine code files are provided. However, if you want to run using your own assembly program, you can build and run the assembler. The program has one argument: the file name of the simplic asm file. Note, again, that the assembly file is written in plain ASCII text.
 
 `simplic.exe "your-asm-file.txt"`
 For example: `simplic.exe "FibbonaciTest.txt"`
