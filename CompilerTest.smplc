@@ -1,0 +1,10 @@
+/*
+This is a test file for the compiler. It should not write any output files. 
+Instead, it should simply print out the DFS of the Parse Tree
+
+*/
+
+namesp OuterNamespace
+{
+	T sumVal<T>(Array<T> array)
+}
