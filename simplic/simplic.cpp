@@ -42,17 +42,20 @@ int main(int argc, char* argv[])
             asmlines.push_back(s);
         }*/
 
-        //got the assembly, now turn that into machine code
+        // got the assembly, now turn that into machine code
         std::list<uint16_t> mcCode = Simplic::Asm::ReadAsm(asmlines);
-
-        //remove the file extention to prepare it for .hex
+         
+        // remove the file extention to prepare it for .hex
         std::string targetFilepath;
         size_t lastdot = std::string(argv[1]).find_last_of(".");
         if (lastdot == std::string::npos) targetFilepath = argv[1];
         else targetFilepath = std::string(argv[1]).substr(0, lastdot);
 
-        //write machine code to file
+        // write machine code to file
         Simplic::Asm::WriteToHexFile(targetFilepath + ".hex", mcCode);
+
+        // just a placeholder printout. Currently there are no outputs yet
+        // std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;
     }
     catch (Simplic::CmplException& exec)
     {
