@@ -2,7 +2,7 @@
 #include <list>
 
 #include "simplic.h"
-#include "lexer.h"
+#include "tokenizer-functions.h"
 
 namespace Simplic::AST
 {

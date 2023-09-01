@@ -42,6 +42,9 @@
     <ClCompile Include="parse-struct-const-def.cpp">
       <Filter>Source Files\Hollow Parsers</Filter>
     </ClCompile>
+    <ClCompile Include="tokenizer-functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simplic.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hollow-parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tokenizer-functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

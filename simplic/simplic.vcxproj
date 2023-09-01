@@ -131,7 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assembler.cpp" />
-    <ClCompile Include="lexer.cpp" />
+    <ClCompile Include="tokenizer-functions.cpp" />
     <ClCompile Include="build-hollow-ast.cpp" />
     <ClCompile Include="parse-func-def.cpp" />
     <ClCompile Include="parse-ident-group.cpp" />
@@ -143,6 +143,7 @@
     <ClInclude Include="hollow-parser.h" />
     <ClInclude Include="lexer.h" />
     <ClInclude Include="simplic.h" />
+    <ClInclude Include="tokenizer-functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
