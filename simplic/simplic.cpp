@@ -30,24 +30,36 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    // it's assemblin' time
-    std::string s;
-    while (std::getline(buffer, s, '\n')) {
-        asmlines.push_back(s);
+    // start the compilation process 
+    try
+    {
+        // then builds the initial hollow AST
+        Simplic::AST::Node AST = Simplic::AST::BuildHollowAST(buffer.str());
+        Simplic::AST::Print(AST);
+
+        /*std::string s;
+        while (std::getline(buffer, s, '\n')) {
+            asmlines.push_back(s);
+        }*/
+
+        //got the assembly, now turn that into machine code
+        std::list<uint16_t> mcCode = Simplic::Asm::ReadAsm(asmlines);
+
+        //remove the file extention to prepare it for .hex
+        std::string targetFilepath;
+        size_t lastdot = std::string(argv[1]).find_last_of(".");
+        if (lastdot == std::string::npos) targetFilepath = argv[1];
+        else targetFilepath = std::string(argv[1]).substr(0, lastdot);
+
+        //write machine code to file
+        Simplic::Asm::WriteToHexFile(targetFilepath + ".hex", mcCode);
     }
-
-    //got the assembly, now turn that into machine code
-    std::list<uint16_t> mcCode = Simplic::Asm::ReadAsm(asmlines);
-
-    //remove the file extention to prepare it for .hex
-    std::string targetFilepath;
-    size_t lastdot = std::string(argv[1]).find_last_of(".");
-    if (lastdot == std::string::npos) targetFilepath = argv[1];
-    else targetFilepath = std::string(argv[1]).substr(0, lastdot);
-
-    //write machine code to file
-    Simplic::Asm::WriteToHexFile(targetFilepath + ".hex", mcCode);
-    std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;
+    catch (Simplic::CmplException& exec)
+    {
+        std::cerr << exec.what() << std::endl;
+        return -1;
+    }
+    
 
     return 0;
 }
