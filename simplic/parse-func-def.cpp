@@ -20,7 +20,7 @@ namespace Simplic::AST
         if (!IsIdentGroup(cursor, returnType))
         {
             // if not, throw exception
-            throw CmplException(cursor, "A function definition must begin with a return type.");
+            AST::CompileError(cursor, "A function definition must begin with a return type.");
         }
         node.prop.push_back(returnType);
 
@@ -32,7 +32,7 @@ namespace Simplic::AST
             node.lexeme = nameNode.lexeme;
         }
         // if not, throw exception
-        else throw CmplException(cursor, "A function definition must have function name.");
+        else AST::CompileError(cursor, "A function definition must have function name.");
 
         // 3) determine whether there are generics for this func
         AST::Node genericsList;
@@ -69,12 +69,12 @@ namespace Simplic::AST
                     Tokenize::Clean(cursor);
                     if (Tokenize::IsSymbol(cursor, LangDef::closeAngBracket)) break;
                     else if (Tokenize::IsSymbol(cursor, LangDef::comma)) continue;
-                    else if (IsEOF(cursor)) throw CmplException(cursor, "Unexpected End-Of-File.");
-                    else throw CmplException(cursor, "Unexpected token");
+                    else if (IsEOF(cursor)) AST::CompileError(cursor, "Unexpected End-Of-File.");
+                    else AST::CompileError(cursor, "Unexpected token");
                 }
                 else
                 {
-                    throw CmplException(cursor, "Expect an identifier for generics.");
+                    AST::CompileError(cursor, "Expect an identifier for generics.");
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace Simplic::AST
         Tokenize::Clean(cursor);
         if (!Tokenize::IsSymbol(cursor, LangDef::openRoundBracket))
         {
-            throw CmplException(cursor, "A function argument list must begin with round bracket.");
+            AST::CompileError(cursor, "A function argument list must begin with round bracket.");
         }
 
         // second, check for closing bracket (for no args)
@@ -109,7 +109,7 @@ namespace Simplic::AST
             if (Tokenize::IsSymbol(cursor, LangDef::comma)) continue;
             // or end with a close bracket
             else if (Tokenize::IsSymbol(cursor, LangDef::closeRoundBracket)) return;
-            else throw CmplException(cursor, "Unexpected token; expected either a comma or closing bracket.");
+            else AST::CompileError(cursor, "Unexpected token; expected either a comma or closing bracket.");
         }
     }
 
@@ -121,7 +121,7 @@ namespace Simplic::AST
         AST::Node identChain;
         if (!IsIdentGroup(cursor, identChain))
         {
-            throw CmplException(cursor, "Unexpected token; expected identifiers for argument type.");
+            AST::CompileError(cursor, "Unexpected token; expected identifiers for argument type.");
         }
         node.prop.push_back(identChain);
 
@@ -148,7 +148,7 @@ namespace Simplic::AST
                 node.prop.push_back(pointerList);
                 break;
             }
-            else throw CmplException(cursor, "Unexpected token; expected asterisk * for pointer declaration");
+            else AST::CompileError(cursor, "Unexpected token; expected asterisk * for pointer declaration");
         }
     }
 

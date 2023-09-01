@@ -40,6 +40,9 @@ namespace Simplic
 
         // Utility function for debugging
         void Print(AST::Node tree, int indentation = 0);
+
+        // If there are issues with the code
+        void CompileError(Cursor cursor, std::string message);
     }
 
     // assembly stage, i.e. the final stage before the hex file
@@ -51,19 +54,4 @@ namespace Simplic
         // Recieves machine code and writes to hex file
         void WriteToHexFile(std::string, std::list<uint16_t>);
     }
-
-    struct CmplException : public std::exception 
-    {
-        Cursor& cursor;
-        std::string message;
-        CmplException(Cursor& cursor, std::string message) : cursor(cursor), message(message) {}
-        const char* what() const throw ();
-    };
-
-    struct AsmException : public std::exception 
-    {
-        std::string message;
-        AsmException(std::string message) : message(message) {}
-        const char* what() const throw ();
-    };
 }

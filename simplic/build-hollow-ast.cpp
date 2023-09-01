@@ -38,7 +38,7 @@ namespace Simplic::AST
                     for (int i = 0; i < nspblockSize.top(); i++) nspScope.pop_back();
                     nspblockSize.pop();
                 }
-                else throw CmplException(cursor, "Unexpected token; all curly brackets '}' are accounted for");
+                else AST::CompileError(cursor, "Unexpected token; all curly brackets '}' are accounted for");
             }
 
             // parse namespace def, if exists
@@ -91,7 +91,7 @@ namespace Simplic::AST
             leftoverNsp.pop_back();
 
             // then, throw this out
-            throw CmplException(cursor, "The namespace '" + leftoverNsp + "' has not been closed; check your '}' brackets.");
+            AST::CompileError(cursor, "The namespace '" + leftoverNsp + "' has not been closed; check your '}' brackets.");
         }
 
         return hollowAST;
@@ -104,16 +104,16 @@ namespace Simplic::AST
             // check that no generics are found
             if (node.prop.back().lexeme == "GENERICS LIST")
             {
-                throw CmplException(cursor, "Unexpected token; no generics allowed for namespace declarations");
+                AST::CompileError(cursor, "Unexpected token; no generics allowed for namespace declarations");
             }
             // get {, but need to deep clean first (i.e. clean multi-line) 
             Tokenize::DeepClean(cursor);
             if (!Tokenize::IsSymbol(cursor, LangDef::openCurlyBracket))
             {
-                throw CmplException(cursor, "Unexpected token; expected a '{' for all namespace declarations");
+                AST::CompileError(cursor, "Unexpected token; expected a '{' for all namespace declarations");
             }
         }
-        else throw CmplException(cursor, "Unexpected token; expected only one or more identifiers");
+        else AST::CompileError(cursor, "Unexpected token; expected only one or more identifiers");
 
     }
 

@@ -137,7 +137,6 @@
     <ClCompile Include="parse-ident-group.cpp" />
     <ClCompile Include="parse-struct-const-def.cpp" />
     <ClCompile Include="simplic.cpp" />
-    <ClCompile Include="exceptions.cpp" />
     <ClCompile Include="analyse.cpp" />
   </ItemGroup>
   <ItemGroup>

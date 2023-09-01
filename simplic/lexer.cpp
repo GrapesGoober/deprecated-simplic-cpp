@@ -109,7 +109,10 @@ namespace Simplic
             // the return inside the loop should fire, 
             // otherwise there are some issues with closing star-slash
             cursor.index = initialIndex;
-            throw CmplException(cursor, "No closing star-slash for block comment");
+            AST::CompileError(cursor, "No closing star-slash for block comment");
+
+            // to suppress warnings
+            return false;
         }
         bool IsSpace(Cursor& cursor)
         {
@@ -177,7 +180,6 @@ namespace Simplic
             return false;
         }
 
-        // TODO: for charstring, implement "Char length can only be 1" exception, and also escaped chars
         bool CharString(Cursor& cursor, AST::Node& node)
         {
             node.cursorIndex = cursor.index;
@@ -215,7 +217,10 @@ namespace Simplic
             // the return inside the loop should fire, 
             // otherwise there are some issues with closing quotation
             cursor.index = node.cursorIndex;
-            throw CmplException(cursor, "No closing quotation for charstring literal");
+            AST::CompileError(cursor, "No closing quotation for charstring literal");
+
+            // to suppress warnings
+            return false;
         }
         // TODO: implement
         bool BinHex(Cursor& cursor, AST::Node& node)

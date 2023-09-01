@@ -21,16 +21,10 @@
     <ClCompile Include="simplic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="exceptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="assembler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="expr-parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="analyse.cpp">

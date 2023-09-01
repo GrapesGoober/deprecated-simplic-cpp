@@ -26,4 +26,11 @@ namespace Simplic::AST
             Print(node, indentation + 1);
         }
     }
+
+    void CompileError(Cursor cursor, std::string message)
+    {
+        // currently unimplemented, but I intend to have pretty printing messages
+        std::cerr << message << std::endl;
+        throw std::exception();
+    }
 }
