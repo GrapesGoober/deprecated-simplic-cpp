@@ -646,7 +646,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Users\Twinklierre\Dropbox\My PC (LAPTOP-OHCN83SQ)\Desktop\Misc\Circuits\Digital\Processor\Simplic Instructions\FibTest.hex</file>
+          <file>C:\Users\Twinklierre\Desktop\Workbench\Simplic Project\simplic - git\examples\FibbonaciTestASM.hex</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -728,7 +728,7 @@
         </entry>
         <entry>
           <string>Frequency</string>
-          <int>2147483647</int>
+          <int>10</int>
         </entry>
       </elementAttributes>
       <pos x="-5660" y="-1120"/>
