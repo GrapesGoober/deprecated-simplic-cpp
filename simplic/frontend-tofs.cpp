@@ -222,14 +222,14 @@ namespace Simplic
             // to suppress warnings
             return false;
         }
-        // TODO: implement
         bool BinHex(Cursor& cursor, AST::Node& node)
         {
+            AST::CompileError(cursor, "BinHex unimplemented");
             return false;
         }
-        // TODO: implement
         bool Decimals(Cursor& cursor, AST::Node& node)
         {
+            AST::CompileError(cursor, "Decimals unimplemented");
             return false;
         }
         bool Literal(Cursor& cursor, AST::Node& node)
