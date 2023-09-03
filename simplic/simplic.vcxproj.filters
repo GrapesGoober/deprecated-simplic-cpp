@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Hollow Parsers">
+    <Filter Include="Source Files\frontend">
       <UniqueIdentifier>{b86dd844-4591-44fb-81a8-ba366e4d3f4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -28,16 +28,16 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="build-hollow-ast.cpp">
-      <Filter>Source Files\Hollow Parsers</Filter>
+      <Filter>Source Files\frontend</Filter>
     </ClCompile>
     <ClCompile Include="parse-func-def.cpp">
-      <Filter>Source Files\Hollow Parsers</Filter>
+      <Filter>Source Files\frontend</Filter>
     </ClCompile>
     <ClCompile Include="parse-ident-group.cpp">
-      <Filter>Source Files\Hollow Parsers</Filter>
+      <Filter>Source Files\frontend</Filter>
     </ClCompile>
     <ClCompile Include="parse-struct-const-def.cpp">
-      <Filter>Source Files\Hollow Parsers</Filter>
+      <Filter>Source Files\frontend</Filter>
     </ClCompile>
     <ClCompile Include="frontend-tofs.cpp">
       <Filter>Source Files</Filter>
