@@ -24,9 +24,6 @@
     <ClCompile Include="assembler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="analyse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,7 +39,7 @@
     <ClCompile Include="parse-struct-const-def.cpp">
       <Filter>Source Files\Hollow Parsers</Filter>
     </ClCompile>
-    <ClCompile Include="tokenizer-functions.cpp">
+    <ClCompile Include="frontend-tofs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
