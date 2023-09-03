@@ -6,17 +6,17 @@
 #include "tokenizer-functions.h"
 #include "hollow-parser.h"
 
-namespace Simplic::AST
+namespace Simplic::FrontEnd
 {
-    AST::Node BuildHollowAST(std::string src)
+    FrontEnd::Node BuildHollowAST(std::string src)
     {
         // creating a new tokenizer cursor to read the source string
         Cursor cursor{ src };
         // root node for hollow AST, containing the signatures
-        AST::Node hollowAST;
+        FrontEnd::Node hollowAST;
         hollowAST.type = "ROOT";
         // node to be used for injection by the parsers
-        AST::Node node;
+        FrontEnd::Node node;
 
         // list of strings, to keep track of namespace scope
         std::list<std::string> nspScope;
@@ -38,7 +38,7 @@ namespace Simplic::AST
                     for (int i = 0; i < nspblockSize.top(); i++) nspScope.pop_back();
                     nspblockSize.pop();
                 }
-                else AST::CompileError(cursor, "Unexpected token; all curly brackets '}' are accounted for");
+                else FrontEnd::CompileError(cursor, "Unexpected token; all curly brackets '}' are accounted for");
             }
 
             // parse namespace def, if exists
@@ -50,7 +50,7 @@ namespace Simplic::AST
                 nspblockSize.push((int)node.prop.size());
 
                 // then loop through each item to push to namespace stack
-                for (AST::Node n : node.prop)
+                for (FrontEnd::Node n : node.prop)
                 {
                     nspScope.push_back(n.lexeme);
                 }
@@ -91,42 +91,42 @@ namespace Simplic::AST
             leftoverNsp.pop_back();
 
             // then, throw this out
-            AST::CompileError(cursor, "The namespace '" + leftoverNsp + "' has not been closed; check your '}' brackets.");
+            FrontEnd::CompileError(cursor, "The namespace '" + leftoverNsp + "' has not been closed; check your '}' brackets.");
         }
 
         return hollowAST;
     }
 
-    void ParseNamespDef(Cursor& cursor, AST::Node& node)
+    void ParseNamespDef(Cursor& cursor, FrontEnd::Node& node)
     {
         if (IsIdentGroup(cursor, node))
         {
             // check that no generics are found
             if (node.prop.back().lexeme == "GENERICS LIST")
             {
-                AST::CompileError(cursor, "Unexpected token; no generics allowed for namespace declarations");
+                FrontEnd::CompileError(cursor, "Unexpected token; no generics allowed for namespace declarations");
             }
             // get {, but need to deep clean first (i.e. clean multi-line) 
             Tokenize::DeepClean(cursor);
             if (!Tokenize::IsSymbol(cursor, LangDef::openCurlyBracket))
             {
-                AST::CompileError(cursor, "Unexpected token; expected a '{' for all namespace declarations");
+                FrontEnd::CompileError(cursor, "Unexpected token; expected a '{' for all namespace declarations");
             }
         }
-        else AST::CompileError(cursor, "Unexpected token; expected only one or more identifiers");
+        else FrontEnd::CompileError(cursor, "Unexpected token; expected only one or more identifiers");
 
     }
 
-    void AssignSignatureToAST(AST::Node& hollowAST, AST::Node node, std::list<std::string> nspScope)
+    void AssignSignatureToAST(FrontEnd::Node& hollowAST, FrontEnd::Node node, std::list<std::string> nspScope)
     {
         // initial point to start search = root of tree
-        AST::Node* currentNode = &hollowAST;
+        FrontEnd::Node* currentNode = &hollowAST;
         // looping through each namespace string
         for (std::string namesp : nspScope)
         {
             bool nodeFound = false;
             // loop through each of node's prop to find the right subtree
-            for (AST::Node& n : (*currentNode).prop)
+            for (FrontEnd::Node& n : (*currentNode).prop)
             {
                 if (n.type == "NAMESP" && n.lexeme == namesp)
                 {
@@ -140,7 +140,7 @@ namespace Simplic::AST
             if (nodeFound == false)
             {
                 // counstruct a new namespace node and append it to current node
-                AST::Node newNode;
+                FrontEnd::Node newNode;
                 newNode.type = "NAMESP";
                 newNode.lexeme = namesp;
                 (*currentNode).prop.push_back(newNode);

@@ -6,15 +6,15 @@
 #include "tokenizer-functions.h"
 #include "hollow-parser.h"
 
-namespace Simplic::AST
+namespace Simplic::FrontEnd
 {
-    void ParseStructDef(Cursor& cursor, AST::Node& node)
+    void ParseStructDef(Cursor& cursor, FrontEnd::Node& node)
     {
-        AST::CompileError(cursor, "struct unimplemented");
+        FrontEnd::CompileError(cursor, "struct unimplemented");
     }
 
-    void ParseConstDef(Cursor& cursor, AST::Node& node)
+    void ParseConstDef(Cursor& cursor, FrontEnd::Node& node)
     {
-        AST::CompileError(cursor, "const unimplemented");
+        FrontEnd::CompileError(cursor, "const unimplemented");
     }
 }

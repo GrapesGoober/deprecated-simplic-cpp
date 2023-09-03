@@ -6,16 +6,16 @@
 #include "tokenizer-functions.h"
 #include "hollow-parser.h"
 
-namespace Simplic::AST
+namespace Simplic::FrontEnd
 {
-    bool IsIdentGroup(Cursor& cursor, AST::Node& node) noexcept
+    bool IsIdentGroup(Cursor& cursor, FrontEnd::Node& node) noexcept
     {
         node.type = "IDENT GROUP";
         node.lexeme = "";
         node.cursorIndex = 0;
-        node.prop = std::list<AST::Node>{};
+        node.prop = std::list<FrontEnd::Node>{};
         int initialIndex = cursor.index;
-        AST::Node identNode;
+        FrontEnd::Node identNode;
 
         Tokenize::Clean(cursor);
 
@@ -50,12 +50,12 @@ namespace Simplic::AST
         return true;
     }
 
-    bool IsGenericsList(Cursor& cursor, AST::Node& node) noexcept
+    bool IsGenericsList(Cursor& cursor, FrontEnd::Node& node) noexcept
     {
         node.type = "GENERICS LIST";
         node.lexeme = "";
         node.cursorIndex = 0;
-        node.prop = std::list<AST::Node>{};
+        node.prop = std::list<FrontEnd::Node>{};
         int initialIndex = cursor.index;
 
         // check for angle bracket
@@ -67,7 +67,7 @@ namespace Simplic::AST
         }
 
         // first node must be ident group
-        AST::Node genericNode;
+        FrontEnd::Node genericNode;
         if (!IsIdentGroup(cursor, genericNode))
         {
             cursor.index = initialIndex;

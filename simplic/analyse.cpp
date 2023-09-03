@@ -4,9 +4,9 @@
 #include "simplic.h"
 #include "tokenizer-functions.h"
 
-namespace Simplic::AST
+namespace Simplic::FrontEnd
 {
-    void Print(AST::Node tree, int indentation)
+    void Print(FrontEnd::Node tree, int indentation)
     {
         for (int i = 0; i < indentation; i++) std::cout << "  ";
         std::cout << tree.type << " " << tree.lexeme;
@@ -21,7 +21,7 @@ namespace Simplic::AST
 
         std::cout << std::endl;
 
-        for (AST::Node node : tree.prop)
+        for (FrontEnd::Node node : tree.prop)
         {
             Print(node, indentation + 1);
         }

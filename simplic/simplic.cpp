@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
     }
 
     // start the compilation process 
-    Simplic::AST::Node AST = Simplic::AST::BuildHollowAST(buffer.str());
-    Simplic::AST::Print(AST);
+    Simplic::FrontEnd::Node AST = Simplic::FrontEnd::BuildHollowAST(buffer.str());
+    Simplic::FrontEnd::Print(AST);
 
     /*std::string s;
     while (std::getline(buffer, s, '\n')) {
