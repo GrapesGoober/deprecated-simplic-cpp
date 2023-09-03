@@ -2,7 +2,7 @@
 #include <list>
 
 #include "simplic.h"
-#include "tokenizer-functions.h"
+#include "frontend-tofs.h"
 
 namespace Simplic::AST
 {

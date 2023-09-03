@@ -3,7 +3,7 @@
 #include <stack>
 
 #include "simplic.h"
-#include "tokenizer-functions.h"
+#include "frontend-tofs.h"
 #include "hollow-parser.h"
 
 namespace Simplic::AST
