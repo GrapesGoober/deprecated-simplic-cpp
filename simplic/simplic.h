@@ -36,8 +36,6 @@ namespace Simplic
         /// <seealso cref="AST::Node"/>
         AST::Node BuildHollowAST(std::string src);
 
-        void ParseExpr(Cursor& cursor, AST::Node& node);
-
         // Utility function for debugging
         void Print(AST::Node tree, int indentation = 0);
 
