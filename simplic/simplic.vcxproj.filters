@@ -40,7 +40,7 @@
       <Filter>Source Files\frontend</Filter>
     </ClCompile>
     <ClCompile Include="frontend-tofs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\frontend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
