@@ -15,11 +15,4 @@ namespace Simplic
         // Recieves machine code and writes to hex file
         void WriteToHexFile(std::string, std::list<uint16_t>);
     }
-
-    struct AsmException : public std::exception 
-    {
-        std::string message;
-        AsmException(std::string message) : message(message) {}
-        const char* what() const throw ();
-    };
 }
