@@ -1,12 +1,13 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
-#include <tuple>
+#include <fstream>
+#include <list>
 
-#include "simplic.h"
+import assembler;
 
 int main(int argc, char* argv[])
 {
+    
     // cli should look like      smplc.exe 'file-to-compile'
     if (argc != 2)
     {
@@ -30,6 +31,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    
     // it's assemblin' time
     std::string s;
     while (std::getline(buffer, s, '\n')) {
@@ -50,4 +52,5 @@ int main(int argc, char* argv[])
     std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;
 
     return 0;
+    
 }

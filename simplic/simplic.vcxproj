@@ -130,13 +130,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="assembler.cpp" />
+    <ClCompile Include="assembler.cppm" />
     <ClCompile Include="simplic.cpp" />
-    <ClCompile Include="exceptions.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="simplic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  
 </Project>

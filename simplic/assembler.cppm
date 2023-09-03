@@ -1,10 +1,11 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <list>
-#include <tuple>
-#include <algorithm>
-#include "simplic.h"
+#include <iostream>;
+#include <fstream>;
+#include <sstream>;
+#include <list>;
+#include <tuple>;
+#include <algorithm>;
+
+export module assembler;
 
 namespace Simplic::Asm
 {
@@ -18,7 +19,7 @@ namespace Simplic::Asm
             "MUL", "LML", "DIV", "MOD", "AND", "ORR", "XOR", "NOR"
         };
         const std::string REGISTER[16] = {
-            
+
             "ZR", "R1", "R2", "R3", "R4", "R5", // general purpose registers
             "R6", "R7", "R8", "R9", "RA", "RB",
             "SP", // Stack Pointer (points to the current top of the stack)
@@ -184,7 +185,7 @@ namespace Simplic::Asm
         return mcCode;
     }
 
-    std::list<uint16_t> ReadAsm(std::list<std::string> asmlines)
+    export std::list<uint16_t> ReadAsm(std::list<std::string> asmlines)
     {
         //reading each lines separated by space ' '
         static std::list<uint16_t> mcodes;
@@ -198,7 +199,7 @@ namespace Simplic::Asm
         return mcodes;
     }
 
-    void WriteToHexFile(std::string filename, std::list<uint16_t> mcodes)
+    export void WriteToHexFile(std::string filename, std::list<uint16_t> mcodes)
     {
         std::ofstream File(filename);
         uint64_t address = 0;
