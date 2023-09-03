@@ -645,10 +645,6 @@
           <intFormat>hex</intFormat>
         </entry>
         <entry>
-          <string>lastDataFile</string>
-          <file>C:\Users\Twinklierre\Desktop\Workbench\Simplic Project\simplic - git\examples\FibbonaciTestASM.hex</file>
-        </entry>
-        <entry>
           <string>autoReload</string>
           <boolean>true</boolean>
         </entry>
