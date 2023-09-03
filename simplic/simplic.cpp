@@ -3,7 +3,8 @@
 #include <sstream>
 #include <tuple>
 
-#include "simplic.h"
+#include "frontend.h"
+#include "backend.h"
 
 int main(int argc, char* argv[])
 {
@@ -27,7 +28,7 @@ int main(int argc, char* argv[])
     std::list<std::string> asmlines;
 
     // got the assembly, now turn that into machine code
-    std::list<uint16_t> mcCode = Simplic::Asm::ReadAsm(asmlines);
+    std::list<uint16_t> mcCode = Simplic::BackEnd::ReadAsm(asmlines);
 
     // remove the file extention to prepare it for .hex
     std::string targetFilepath;
@@ -36,7 +37,7 @@ int main(int argc, char* argv[])
     else targetFilepath = std::string(argv[1]).substr(0, lastdot);
 
     // write machine code to file
-    Simplic::Asm::WriteToHexFile(targetFilepath + ".hex", mcCode);
+    Simplic::BackEnd::WriteToHexFile(targetFilepath + ".hex", mcCode);
 
     // doesn't need this for the moment
     // std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;

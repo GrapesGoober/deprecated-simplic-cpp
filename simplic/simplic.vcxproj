@@ -131,12 +131,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assembler.cpp" />
+    <ClCompile Include="assembler.cppm" />
+    <ClCompile Include="simplic.cppm" />
     <ClCompile Include="simplic.cpp" />
-    <ClCompile Include="exceptions.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="simplic.h" />
+    <ClInclude Include="backend.h" />
+    <ClInclude Include="frontend-langdef.h" />
+    <ClInclude Include="frontend-tofs.h" />
+    <ClInclude Include="frontend.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  
 </Project>

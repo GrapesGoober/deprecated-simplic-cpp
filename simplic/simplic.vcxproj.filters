@@ -13,20 +13,44 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\frontend">
+      <UniqueIdentifier>{6a090316-f1a3-4ed6-b883-da33b40ea19a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\frontend">
+      <UniqueIdentifier>{99efbbcb-4b3e-4b26-9354-1f7c43310c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\backend">
+      <UniqueIdentifier>{589038e8-34c7-4762-b944-0d66d79a9f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\backend">
+      <UniqueIdentifier>{00b45f36-6ee9-4b8c-90b3-73783e17bc8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simplic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="exceptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="assembler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\backend</Filter>
+    </ClCompile>
+    <ClCompile Include="simplic.cppm">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assembler.cppm">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="simplic.h">
+    <ClInclude Include="frontend-langdef.h">
+      <Filter>Header Files\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="frontend.h">
+      <Filter>Header Files\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="frontend-tofs.h">
+      <Filter>Header Files\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="backend.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
