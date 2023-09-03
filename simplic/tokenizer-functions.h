@@ -25,10 +25,10 @@ namespace Simplic
         bool IsSpace(Cursor& cursor);
         bool IsKeyword(Cursor& cursor, std::string keyword);
         bool IsSymbol(Cursor& cursor, std::string symbol);
-        bool UnaryOp(Cursor& cursor, FrontEnd::Node& node);
-        bool BinaryOp(Cursor& cursor, FrontEnd::Node& node);
-        bool Literal(Cursor& cursor, FrontEnd::Node& node);
-        bool Ident(Cursor& cursor, FrontEnd::Node& node);
+        bool UnaryOp(Cursor& cursor, AST::Node& node);
+        bool BinaryOp(Cursor& cursor, AST::Node& node);
+        bool Literal(Cursor& cursor, AST::Node& node);
+        bool Ident(Cursor& cursor, AST::Node& node);
     }
 
     namespace LangDef

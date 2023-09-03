@@ -109,7 +109,7 @@ namespace Simplic
             // the return inside the loop should fire, 
             // otherwise there are some issues with closing star-slash
             cursor.index = initialIndex;
-            FrontEnd::CompileError(cursor, "No closing star-slash for block comment");
+            AST::CompileError(cursor, "No closing star-slash for block comment");
 
             // to suppress warnings
             return false;
@@ -153,7 +153,7 @@ namespace Simplic
                 return false;
             }
         }
-        bool UnaryOp(Cursor& cursor, FrontEnd::Node& node)
+        bool UnaryOp(Cursor& cursor, AST::Node& node)
         {
             node.cursorIndex = cursor.index;
 
@@ -166,7 +166,7 @@ namespace Simplic
             }
             return false;
         }
-        bool BinaryOp(Cursor& cursor, FrontEnd::Node& node)
+        bool BinaryOp(Cursor& cursor, AST::Node& node)
         {
             node.cursorIndex = cursor.index;
 
@@ -180,7 +180,7 @@ namespace Simplic
             return false;
         }
 
-        bool CharString(Cursor& cursor, FrontEnd::Node& node)
+        bool CharString(Cursor& cursor, AST::Node& node)
         {
             node.cursorIndex = cursor.index;
 
@@ -217,22 +217,22 @@ namespace Simplic
             // the return inside the loop should fire, 
             // otherwise there are some issues with closing quotation
             cursor.index = node.cursorIndex;
-            FrontEnd::CompileError(cursor, "No closing quotation for charstring literal");
+            AST::CompileError(cursor, "No closing quotation for charstring literal");
 
             // to suppress warnings
             return false;
         }
-        bool BinHex(Cursor& cursor, FrontEnd::Node& node)
+        bool BinHex(Cursor& cursor, AST::Node& node)
         {
-            FrontEnd::CompileError(cursor, "BinHex unimplemented");
+            AST::CompileError(cursor, "BinHex unimplemented");
             return false;
         }
-        bool Decimals(Cursor& cursor, FrontEnd::Node& node)
+        bool Decimals(Cursor& cursor, AST::Node& node)
         {
-            FrontEnd::CompileError(cursor, "Decimals unimplemented");
+            AST::CompileError(cursor, "Decimals unimplemented");
             return false;
         }
-        bool Literal(Cursor& cursor, FrontEnd::Node& node)
+        bool Literal(Cursor& cursor, AST::Node& node)
         {
             if (CharString(cursor, node)) return true;
             else if (BinHex(cursor, node)) return true;
@@ -240,7 +240,7 @@ namespace Simplic
             else return false;
         }
 
-        bool Ident(Cursor& cursor, FrontEnd::Node& node)
+        bool Ident(Cursor& cursor, AST::Node& node)
         {
             node.cursorIndex = cursor.index;
 

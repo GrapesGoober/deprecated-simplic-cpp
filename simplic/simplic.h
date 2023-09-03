@@ -13,7 +13,7 @@ namespace Simplic
         Cursor(std::string src) : source(src + '\n') { }
     };
 
-    namespace FrontEnd
+    namespace AST
     {
         // each node in the AST with any m-ary children (called property)
         struct Node
@@ -33,11 +33,11 @@ namespace Simplic
         /// 
         /// <param name='src'> source code, in string </param>
         /// <returns> a partially built tree, called "hollow AST" </returns>
-        /// <seealso cref="FrontEnd::Node"/>
-        FrontEnd::Node BuildHollowAST(std::string src);
+        /// <seealso cref="AST::Node"/>
+        AST::Node BuildHollowAST(std::string src);
 
         // Utility function for debugging
-        void Print(FrontEnd::Node tree, int indentation = 0);
+        void Print(AST::Node tree, int indentation = 0);
 
         // If there are issues with the code
         void CompileError(Cursor cursor, std::string message);
