@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="backend-asm.ixx" />
     <ClCompile Include="frontend-tofs.ixx" />
+    <ClCompile Include="frontend.ixx" />
     <ClCompile Include="simplic.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

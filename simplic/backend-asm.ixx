@@ -1,3 +1,8 @@
+// Simplic Compiler, 2022, Author: Nachat Kaewmeesang
+// backend-asm.ixx is module file for the assembler
+// this contains the three exported functions: AsmfileToBinary, BinaryToHexfile and ReplaceExtentionToHex
+// the rest is internal functions
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -325,5 +330,18 @@ namespace Simplic::Asm
 
         file << ":00000001FF" << std::endl;
         file.close();
+    }
+
+    /// <summary> 
+    /// Replace a file destination extention into .hex
+    /// </summary>
+    /// <param name='file'> the destination hex file </param>
+    /// <param name='instructions'> the list of binary instructions </param>
+    export std::string ReplaceExtentionToHex(std::string sourcefilepath) 
+    {
+        std::string hexfilepath;
+        size_t lastdot = std::string(sourcefilepath).find_last_of(".");
+        if (lastdot == std::string::npos) hexfilepath = sourcefilepath;
+        else hexfilepath = std::string(sourcefilepath).substr(0, lastdot);
     }
 }
