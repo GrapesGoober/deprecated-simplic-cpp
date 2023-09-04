@@ -16,40 +16,27 @@ int main(int argc, char* argv[])
     }
 
     // start reading the file
-    std::ifstream SourceFile(argv[1]);
-    std::list<std::string> asmlines;
-    std::stringstream buffer;
+    std::ifstream asmfile(argv[1]);
 
-    if (SourceFile.is_open())
-    {
-        buffer << SourceFile.rdbuf();
-        SourceFile.close();
-    }
-    else
+    if (!asmfile.is_open())
     {
         std::cerr << "Cannot open file: " + std::string(argv[1]);
         return -1;
     }
 
-    
-    // it's assemblin' time
-    std::string s;
-    while (std::getline(buffer, s, '\n')) {
-        asmlines.push_back(s);
-    }
-
-    //got the assembly, now turn that into machine code
-    std::list<uint16_t> mcCode = Simplic::Asm::ReadAsm(asmlines);
-
-    //remove the file extention to prepare it for .hex
+    // remove the file extention to prepare it for .hex
     std::string targetFilepath;
     size_t lastdot = std::string(argv[1]).find_last_of(".");
     if (lastdot == std::string::npos) targetFilepath = argv[1];
     else targetFilepath = std::string(argv[1]).substr(0, lastdot);
 
-    //write machine code to file
-    Simplic::Asm::WriteToHexFile(targetFilepath + ".hex", mcCode);
+    // write machine code to file
+    std::ofstream hexfile(targetFilepath + ".hex");
+    Simplic::Asm::FileToFile(asmfile, hexfile);
     std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;
+
+    asmfile.close();
+    hexfile.close();
 
     return 0;
     
