@@ -24,6 +24,10 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    // reads the file, then generates all the binary
+    std::list<uint16_t> binary = Simplic::Asm::AsmfileToBinary(asmfile);
+    asmfile.close();
+
     // remove the file extention to prepare it for .hex
     std::string targetFilepath;
     size_t lastdot = std::string(argv[1]).find_last_of(".");
@@ -31,13 +35,8 @@ int main(int argc, char* argv[])
     else targetFilepath = std::string(argv[1]).substr(0, lastdot);
 
     // write machine code to file
-    std::ofstream hexfile(targetFilepath + ".hex");
-    Simplic::Asm::FileToFile(asmfile, hexfile);
+    Simplic::Asm::BinaryToHexfile(targetFilepath + ".hex", binary);
     std::cout << "Written to file \"" << targetFilepath << ".hex\" successfully" << std::endl;
-
-    asmfile.close();
-    hexfile.close();
-
     return 0;
     
 }
