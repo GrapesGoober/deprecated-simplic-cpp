@@ -130,8 +130,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="backend-asm.cppm" />
-    <ClCompile Include="frontend-tofs.cppm" />
+    <ClCompile Include="backend-asm.ixx" />
+    <ClCompile Include="frontend-tofs.ixx" />
     <ClCompile Include="simplic.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

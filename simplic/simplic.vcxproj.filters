@@ -18,10 +18,10 @@
     <ClCompile Include="simplic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="backend-asm.cppm">
+    <ClCompile Include="backend-asm.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="frontend-tofs.cppm">
+    <ClCompile Include="frontend-tofs.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
