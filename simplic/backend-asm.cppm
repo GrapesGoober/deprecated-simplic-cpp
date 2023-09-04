@@ -4,7 +4,7 @@
 #include <list>
 #include <map>
 
-export module assembler;
+export module backend_asm;
 
 namespace Simplic::Asm
 {

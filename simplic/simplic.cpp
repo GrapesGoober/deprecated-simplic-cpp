@@ -3,7 +3,7 @@
 #include <fstream>
 #include <list>
 
-import assembler;
+import backend_asm;
 
 int main(int argc, char* argv[])
 {
