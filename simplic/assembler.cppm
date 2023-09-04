@@ -96,7 +96,7 @@ namespace Simplic::Asm
 
         // put the opcode bin into instruction
         for (int i = 0; i < 4; ++i) {
-            instruction[15-i] = opcodeBin[i];
+            instruction[15-i] = opcodeBin[3-i];
         }
 
         std::cout << instruction << std::endl;
