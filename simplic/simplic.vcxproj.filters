@@ -27,5 +27,8 @@
     <ClCompile Include="simplic-interface.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="frontend-langdef.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

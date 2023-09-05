@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="backend-asm.ixx" />
+    <ClCompile Include="frontend-langdef.ixx" />
     <ClCompile Include="frontend-tofs.ixx" />
     <ClCompile Include="simplic-interface.ixx" />
     <ClCompile Include="simplic.cpp" />
