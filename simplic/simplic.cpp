@@ -1,5 +1,5 @@
 // Simplic Compiler, 2022, Author: Nachat Kaewmeesang
-// simplic.cpp is the main file containing the entry point of the compiler
+// simplic.cpp contains entry point of the compiler (the main function)
 // this is a good starting point to read how this compiler works
 
 #include <iostream>
@@ -7,8 +7,9 @@
 #include <fstream>
 #include <list>
 
-import frontend_tofs;
-import backend_asm;
+import simplic;
+import simplic.tofs;
+import simplic.assembler;
 
 int main(int argc, char* argv[])
 {
@@ -29,7 +30,8 @@ int main(int argc, char* argv[])
     }
 
     // reads the file and tokenize, to test the TOFs
-    
+    char ch;
+    Simplic::Cursor cursor(sourcefile);
 
     sourcefile.close();
 

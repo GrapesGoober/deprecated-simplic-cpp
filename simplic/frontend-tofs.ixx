@@ -1,9 +1,26 @@
-export module frontend_tofs;
+#include <iostream>
+#include <fstream>
+#include <list>
+
+import simplic;
+export module simplic.tofs;
 
 namespace Simplic::TOFs
 {
-	export bool GetNext()
+    const size_t bufsize = 1024;
+	export bool GetChar(Cursor& cursor)
 	{
-		return false;
+        char ch;
+        if (cursor.file.get(ch))
+		{
+            cursor.buffer.push_back(ch);
+            if (cursor.buffer.size() > bufsize) cursor.buffer.pop_front();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
 	}
 }

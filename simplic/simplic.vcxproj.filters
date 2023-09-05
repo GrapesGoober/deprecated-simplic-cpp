@@ -24,7 +24,7 @@
     <ClCompile Include="frontend-tofs.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="frontend.ixx">
+    <ClCompile Include="simplic-interface.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

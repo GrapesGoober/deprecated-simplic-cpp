@@ -9,7 +9,8 @@
 #include <list>
 #include <map>
 
-export module backend_asm;
+import simplic;
+export module simplic.assembler;
 
 namespace Simplic::Asm
 {
@@ -343,5 +344,6 @@ namespace Simplic::Asm
         size_t lastdot = std::string(sourcefilepath).find_last_of(".");
         if (lastdot == std::string::npos) hexfilepath = sourcefilepath;
         else hexfilepath = std::string(sourcefilepath).substr(0, lastdot);
+        return hexfilepath;
     }
 }
