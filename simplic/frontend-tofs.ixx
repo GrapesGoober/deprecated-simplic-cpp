@@ -7,10 +7,12 @@ export module simplic.tofs;
 
 namespace Simplic::TOFs
 {
-    const size_t bufsize = 1024;
-	export bool GetChar(Cursor& cursor)
+	// cursor's buffer size limitation
+	// this value can be anything, 1000 just seems convenient
+    const size_t bufsize = 1000;
+
+	export bool GetChar(Cursor& cursor, char& ch)
 	{
-        char ch;
         if (cursor.file.get(ch))
 		{
             cursor.buffer.push_back(ch);
